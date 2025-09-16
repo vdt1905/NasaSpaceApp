@@ -1,11 +1,12 @@
 
 import React from "react"
 import SpaceTimelineExplorer from "./Components/SpaceTimelineExplorer"
+import TerraMetaverse from "./Components/TerraMetaverse"
 function App() {
 
 
   return (
-    <SpaceTimelineExplorer/>
+    <TerraMetaverse/>
     
   )
 }

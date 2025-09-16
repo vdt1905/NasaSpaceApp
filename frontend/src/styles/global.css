@@ -1,0 +1,45 @@
+
+@tailwind utilities;
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white bg-opacity-10 backdrop-filter backdrop-blur-md border border-white border-opacity-20 rounded-lg shadow-lg;
+  }
+  
+  .glow-text-blue {
+    text-shadow: 0 0 10px theme('colors.blue.400'), 0 0 20px theme('colors.blue.400');
+  }
+  
+  .glow-text-green {
+    text-shadow: 0 0 10px theme('colors.green.400'), 0 0 20px theme('colors.green.400');
+  }
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px theme('colors.blue.400'); }
+  50% { box-shadow: 0 0 20px theme('colors.blue.400'), 0 0 30px theme('colors.blue.400'); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

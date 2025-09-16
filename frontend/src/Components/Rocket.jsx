@@ -1,57 +1,59 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {  Zap, Globe, Heart, Cpu, Leaf, GraduationCap, Wifi, Atom, Play, RotateCcw, Keyboard, Info } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
+const Rocket = ({ position, velocity }) => {
+  const rocketRef = useRef(null);
+  const flameRef = useRef(null);
 
-export const Rocket = ({ position }) => {
+  useEffect(() => {
+    // Update rocket position based on props
+    if (rocketRef.current) {
+      gsap.to(rocketRef.current, {
+        x: `${position.x}vw`,
+        y: `${position.y}vh`,
+        duration: 0.1,
+        ease: "power1.out"
+      });
+    }
+    
+    // Animate flame based on velocity
+    if (flameRef.current) {
+      const speed = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+      const flameSize = Math.min(30, 15 + speed * 50);
+      
+      gsap.to(flameRef.current, {
+        height: flameSize,
+        duration: 0.1
+      });
+    }
+  }, [position, velocity]);
+
+  // Calculate rotation based on velocity
+  const rotation = Math.atan2(velocity.y, velocity.x) * (180 / Math.PI);
+
   return (
-    <motion.div
-      className="absolute transform -translate-x-1/2 -translate-y-1/2 z-50 transition-all duration-300 ease-out"
-      style={{ left: `${position.x}%`, top: `${position.y}%` }}
-      animate={{
-        y: [0, -5, 0],
-      }}
-      transition={{
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
+    <div 
+      ref={rocketRef}
+      className="absolute w-12 h-12 transform -translate-x-1/2 -translate-y-1/2"
+      style={{ left: `${position.x}vw`, top: `${position.y}vh`, rotate: `${rotation}deg` }}
     >
-      <div className="relative">
-        {/* Rocket Body */}
-        <div
-          className="relative w-12 h-20 bg-gradient-to-t from-blue-500 via-purple-500 to-pink-500
-                     rounded-t-full rounded-b-lg shadow-2xl border border-white/30"
-        >
-          {/* Rocket Window */}
-          <div className="absolute top-2 left-1/2 transform -translate-x-1/2
-                        w-4 h-4 bg-cyan-300 rounded-full border-2 border-white/50
-                        shadow-inner" />
-          
-          {/* Rocket Fins */}
-          <div className="absolute bottom-0 -left-2 w-4 h-6 bg-gray-700
-                        transform rotate-12 rounded-l-lg" />
-          <div className="absolute bottom-0 -right-2 w-4 h-6 bg-gray-700
-                        transform -rotate-12 rounded-r-lg" />
-        </div>
-        
-        {/* Engine Flames */}
-        <motion.div
-          className="absolute -bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{
-            scale: [0.8, 1.2, 0.8],
-          }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-        >
-          <div className="w-6 h-8 bg-gradient-to-b from-orange-400 via-red-500 to-yellow-300
-                        rounded-b-full blur-sm" />
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2
-                        w-4 h-6 bg-gradient-to-b from-blue-400 to-purple-500
-                        rounded-b-full" />
-        </motion.div>
+      {/* Rocket body */}
+      <div className="absolute w-12 h-8 bg-gray-200 rounded-t-lg rounded-br-lg transform skew-x-12 shadow-lg">
+        <div className="w-4 h-4 bg-blue-500 rounded-full absolute top-2 left-4"></div> {/* Cockpit */}
       </div>
-    </motion.div>
+      
+      {/* Rocket fins */}
+      <div className="absolute w-4 h-4 bg-red-500 transform -skew-x-12 -rotate-45 -bottom-2 -left-2"></div>
+      <div className="absolute w-4 h-4 bg-red-500 transform -skew-x-12 rotate-45 -bottom-2 -right-2"></div>
+      
+      {/* Rocket flame */}
+      <div 
+        ref={flameRef}
+        className="absolute top-8 left-4 w-4 h-4 bg-orange-500 rounded-full transform -translate-x-1/2 flame-glow"
+        style={{ height: '15px' }}
+      ></div>
+    </div>
   );
 };
 
-export default Rocket
+export default Rocket;
